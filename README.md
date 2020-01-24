@@ -79,7 +79,7 @@ The [small scripting language](https://github.com/skx/evalfilter/) we embed is e
 * `remove(String)`
   * This will remove the given label from the message.
 
-Interestingly if you remove the `UNSEEN` label the message will be marked as having been read by the UI.
+Interestingly if you remove the `UNSEEN` label the message will be marked as having been read by the UI, as you can see demonstrated by [the example script](labeller.script.example).
 
 It is possible we could expose additional primitives in the future.
 
