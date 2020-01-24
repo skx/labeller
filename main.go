@@ -70,19 +70,24 @@ type Message struct {
 // parseAddress turns an email address into individual parts
 func parseAddress(address string) (string, string, string) {
 
-	// Get the raw email address from the header.
 	//
-	// So '"Steve Kemp" <foo@example.com>' will become 'foo@example.com'.
+	// Get the raw email address from the header, and the parts
+	// of it.
+	//
+	// So 'From: "Steve Kemp" <foo@example.com>' will become:
+	//
+	//   1. Raw email: `foo@example.com`
+	//   2. Local-part: `foo`
+	//   3. Domain: `example.com`
 	//
 	addr, _ := mail.ParseAddress(address)
 	parts := strings.Split(addr.Address, "@")
-
 	return addr.Address, parts[0], parts[1]
 }
 
-//
-// Prepare the user-script
-//
+// prepareScript configures our embedded scripting engine with the
+// user-defined script as well as the custom primitives/functions
+// we provide to that environment.
 func prepareScript(path string) error {
 
 	//
@@ -105,7 +110,8 @@ func prepareScript(path string) error {
 	//
 	// Extend our scripting-langague with new primitives.
 	//
-	//    add("String") -> Adds the given label.
+	//    add("String")    -> Adds the given label.
+	//    remove("String") -> Removes the given label.
 	//
 	eval.AddFunction("add",
 		func(args []object.Object) object.Object {
@@ -216,15 +222,14 @@ func main() {
 	// At this point we have authentication handled, so we can actually
 	// start processing our things.
 	//
-	//	srv, err = gmail.New(client)
 	srv, err = gmail.NewService(context.Background(), option.WithHTTPClient(client))
 	if err != nil {
-		fmt.Printf("Unable to retrieve Gmail client: %v", err)
+		fmt.Printf("Unable to create Gmail client: %v", err)
 		return
 	}
 
 	//
-	// If we're reworking our labels then do so
+	// If we're reworking our labels then do so now.
 	//
 	if *updateLabels {
 
@@ -305,8 +310,9 @@ func main() {
 		//
 		// Get the message.
 		//
-		// We specify "metadata" here which means we only need to return
-		// a few details from the message rather than the complete email.
+		// We specify "metadata" here which means we only need to
+		// return a few details from the message rather than the
+		// complete email - which might be multiple Mb in size.
 		//
 		msg, err := srv.Users.Messages.Get("me", entry.Id).Format("metadata").Do()
 		if err != nil {
@@ -362,12 +368,14 @@ func main() {
 		//
 		// Evaluate the user-script.
 		//
-		// This might add labels, etc.
+		// Unlike most uses of our evalfilter engine we don't
+		// care about the result here.  We assume if the script
+		// wants to add/remove a label it will do so, without
+		// telling us.
 		//
 		_, scriptErr := eval.Run(data)
 		if scriptErr != nil {
 			fmt.Printf("Error executing script:%s", scriptErr.Error())
 		}
 	}
-
 }
