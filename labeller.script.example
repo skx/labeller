@@ -1,0 +1,72 @@
+//
+// This is the example-script which adds labels to new/unread messages.
+//
+// Save this file at ~/.labeller.script, or pass the path to the
+// CLI via:
+//
+//   $ labeller -script /path/to/script
+//
+
+
+
+//
+// Assuming we get a message from "bob@example.com" we'll add
+// two labels "bob" and "example.com"
+//
+// Messages can have multiple recipients, but will only have a single
+// sender, of course.
+//
+add( FromPart );
+add( FromDomain );
+
+//
+// Prove we can do "complex" things too - by adding a label
+// conditionally, depending upon the contents of the Subject-header.
+//
+// This also marks the message as having been read.
+//
+if ( Subject ~= /attic: backup/ ) {
+
+   //
+   // Add the backup-label
+   //
+   add( "backups" );
+
+   //
+   // Mark the message as having been read.
+   //
+   remove( "UNREAD" );
+}
+
+
+//
+// As noted messages can have multiple recipients.
+//
+// Output the count and distinct recipients here.
+//
+print( "\tThe message has ", len(To), " recipients\n");
+
+i = 0;
+while( i < len(To) )
+{
+   print( "\t\tRecipient:", i+1, " ", To[i],
+          " Local:", ToPart[i], " Domain:", ToDomain[i], "\n" );
+   i = i + 1;
+}
+print( "\n");
+
+
+//
+// Testing recipients is easier since we can use the `in` function
+// to test if a value is in the array.  No need to walk over it manually.
+//
+if ( "skx@debian.org" in To ) {
+   print( "I'm a Debian mail\n");
+}
+
+
+//
+// Return value doesn't matter for this script, but you MUST
+// return something.
+//
+return false;
