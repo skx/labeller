@@ -1,3 +1,7 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/skx/labeller)](https://goreportcard.com/report/github.com/skx/labeller)
+[![license](https://img.shields.io/github/license/skx/labeller.svg)](https://github.com/skx/labeller/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/release/skx/labeller.svg)](https://github.com/skx/labeller/releases/latest)
+
 * [labeller](#labeller)
    * [Example Script](#example-script)
    * [Scripting Facilities](#scripting-facilities)
