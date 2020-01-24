@@ -1,3 +1,12 @@
+* [labeller](#labeller)
+   * [Example Script](#example-script)
+   * [Scripting Facilities](#scripting-facilities)
+* [Building](#building)
+* [Configuration](#configuration)
+   * [First Run](#first-run)
+* [Feedback?](#feedback)
+
+
 # labeller
 
 This repository contains a simple tool which will allow you to easily add/remove labels to your Gmail-hosted email based on the messages' subject, sender, or recipient.  This is something somebody coming from a self-hosted email setup might enjoy.  In the past I had an elaborate `procmail` setup to filter messages into different folders, and while you can search gmail pretty freely I'm going to need labels as a crutch for at least a short while.
