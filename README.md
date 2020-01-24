@@ -111,7 +111,7 @@ It should be said that the authentication I'm using was modeled upon the Google 
 
 In brief this is what you want to do:
 
-* 1. Login to the google cloud and create a new project, I named mine `procmail`
+* 1 Login to the google cloud and create a new project, I named mine `procmail`
   * https://console.cloud.google.com/projectcreate
     * You might need to choose your organization first here and in later steps, it all depends how many accounts you have and who they belong to.
 * 2 Now you want to go to the credentials page:
@@ -119,7 +119,7 @@ In brief this is what you want to do:
   * Create new: "Oauth2" client.  Give it a name that you like.
     * I chose type "other" and left the majority of the fields blank.
       * You _might_ have to create a "Consent Screen" first, I think this only applies to those users who are using gsuite.
-* 3. Once you've complete the Oauth2 client-creation you'll find a download icon.  Click it
+* 3 Once you've complete the Oauth2 client-creation you'll find a download icon.  Click it
   * This will save something like `client_secret_blah.....googleusercontent.com.json`
 
 Save the downloaded credentials-file as "`~/.labeller.credentials`" and you can then run the application.
@@ -129,17 +129,21 @@ Save the downloaded credentials-file as "`~/.labeller.credentials`" and you can 
 
 ## First Run
 
-The first time you run the script you'll be prompted to open a URL with your browser, and grant the permission to read/modify BUT NOT DELETE your email.
+The first time you run the script you'll be prompted to open a URL with your browser, and grant the permission to the script:
 
-Assuming you wish to proceed you'll get shown a token.  Paste that into your console and you're good.
+* The script will get the ability to __read__ your mail.
+* The script will get the ability to __modify__ your mail.
+* The script __will not__ get the ability to delete your mail.
 
-However there is another step.  The first time you've logged in you'll see an error message:
+Assuming you wish to proceed you'll get shown a token.  Paste that into the console which showed you the URL, and you're then good to proceed.
+
+However there _might_ be another step, the first time you've logged in you __might__ see an error message:
 
 > Error 403: Access Not Configured.
 > Gmail API has not been used in project XXXXX before or it is disabled.
 >Enable it by visiting https://console.developers.google.com/apis/api/gmail.googleapis.com/overview?project=XXXXXX then retry.
 
-So do that.  And FINALLY you should be good to go.
+If required do that, it really depends on the setup of the "project", which I'm hazy on.  Anyway once you've done that you should be able to actually use the damn tool.
 
 
 
