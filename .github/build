@@ -10,9 +10,6 @@ if [ ! -d "${OUTPUT}" ]; then
     mkdir -p "${OUTPUT}"
 fi
 
-# Build in our CLI directory
-cd ./cmd/maildir-tools
-
 # We build on multiple platforms/archs
 BUILD_PLATFORMS="linux darwin freebsd"
 BUILD_ARCHS="amd64 386"
