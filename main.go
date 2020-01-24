@@ -64,7 +64,11 @@ type Message struct {
 	FromPart   string // bob
 	FromDomain string // example.com
 
+	// Subject holds the message-subject
 	Subject string
+
+	// Labels holds any existing lables
+	Labels []string
 }
 
 // parseAddress turns an email address into individual parts
@@ -326,6 +330,22 @@ func main() {
 		// our embedded scripting-language.
 		//
 		var data Message
+
+		//
+		// Populate lables
+		//
+		for _, id := range msg.LabelIds {
+
+			name, err := getLabelById(srv, id)
+			if err == nil {
+				data.Labels = append(data.Labels, name)
+			}
+
+			if *verbose {
+				fmt.Printf("\tLabel on message: %s\n", name)
+			}
+
+		}
 
 		//
 		// Populate the structure, this is a bit horrid.

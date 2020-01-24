@@ -66,6 +66,17 @@ if ( "skx@debian.org" in To ) {
 
 
 //
+// Show existing labels, if any
+//
+print("\tThe message has ", len(Labels), " labels.\n");
+i = 0;
+while( i < len(Labels) ) {
+  print("\tLabel ", i+1 , " is " , Labels[i], "\n");
+  i = i + 1;
+}
+
+
+//
 // Return value doesn't matter for this script, but you MUST
 // return something.
 //
