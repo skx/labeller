@@ -60,6 +60,9 @@ As you might suspect script has access to a number of fields from the message it
   * This contains the email-address of the message-sender.  (e.g. "`steve@example.com`")
   * Additionally `FromPart` contains the local-part of the address (e.g. "`steve`")
   * Additionally `FromDomain` contains the domain of the address (e.g. "`example.com`".
+* `Labels`
+  * The array of labels already applied to the message.
+  * By default we'll only run on messages that match the filter `is:unread -has:userlabels`, but you might decide to run on all messages which are unread via `labeller -filter="is:unread"`, which means that the messages we're seeing will have labels.
 * `Subject`
   * The subject of the message.
 * `To`
