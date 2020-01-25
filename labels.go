@@ -87,5 +87,5 @@ func getLabelByID(srv *gmail.Service, id string) (string, error) {
 		return found, nil
 	}
 
-	return "", fmt.Errorf("failed to lookup lable ID %s", id)
+	return "", fmt.Errorf("failed to lookup label ID %s", id)
 }
