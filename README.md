@@ -165,6 +165,18 @@ Run `labeller -help` for details, but in brief:
 * `labeller -update-labels`
   * Update __every__ label to be in the "show only if unread" state.
 
+By default we run the supplied script to all unread messages with no existing labels, but via the `-filter` flag you can change what is matched.
+
+For example you might decide that you wish to add the `personal` label to all messages sent from `@example.com`.  To do that you could run:
+
+    $ labeller -filter="{to:*@example.com from:*@example.com}" -script add.label
+
+Where `add.label` contains:
+
+    add( "personal" );
+    return true;
+
+
 
 
 
