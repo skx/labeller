@@ -13,7 +13,10 @@ import (
 var labels2ID map[string]string
 var id2Labels map[string]string
 
-func LoadLabels() error {
+// loadLabels fetches all the labels available, and populates our
+// caches.  We cache on name=>id, and id=>name to allow lookups in
+// both directions.
+func loadLabels() error {
 
 	// Create our maps
 	labels2ID = make(map[string]string)
@@ -41,7 +44,7 @@ func getLabelID(srv *gmail.Service, name string) (string, error) {
 	// Get the list of labels if we've not done so.
 	//
 	if len(labels2ID) == 0 {
-		err := LoadLabels()
+		err := loadLabels()
 		if err != nil {
 			return "", err
 		}
@@ -66,13 +69,13 @@ func getLabelID(srv *gmail.Service, name string) (string, error) {
 	return created.Id, nil
 }
 
-// getLabelById returns the human readable label, by ID
-func getLabelById(srv *gmail.Service, id string) (string, error) {
+// getLabelByID returns the human readable label, by ID
+func getLabelByID(srv *gmail.Service, id string) (string, error) {
 	//
 	// Get the list of labels if we've not done so.
 	//
 	if len(labels2ID) == 0 {
-		err := LoadLabels()
+		err := loadLabels()
 		if err != nil {
 			return "", err
 		}

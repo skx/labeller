@@ -424,7 +424,7 @@ func main() {
 		//
 		for _, id := range msg.LabelIds {
 
-			name, err := getLabelById(srv, id)
+			name, err := getLabelByID(srv, id)
 			if err == nil {
 				data.Labels = append(data.Labels, name)
 			}
