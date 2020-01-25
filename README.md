@@ -8,6 +8,7 @@
 * [Building](#building)
 * [Configuration](#configuration)
    * [First Run](#first-run)
+* [Label Manipulation](#label-manipulation)
 * [Feedback?](#feedback)
 
 
@@ -147,6 +148,22 @@ However there _might_ be another step, the first time you've logged in you __mig
 >Enable it by visiting https://console.developers.google.com/apis/api/gmail.googleapis.com/overview?project=XXXXXX then retry.
 
 If required do that, it really depends on the setup of the "project", which I'm hazy on.  Anyway once you've done that you should be able to actually use the damn tool.
+
+
+
+
+# Label Manipulation
+
+In addition to the scripting support already documented there are some utility flags for working with labels.
+
+Run `labeller -help` for details, but in brief:
+
+* `labeller -list-labels`
+  * Show all available labels.
+* `labeller -delete-labels=XX`
+  * Remove all labels that match the specified regular expression.
+* `labeller -update-labels`
+  * Update __every__ label to be in the "show only if unread" state.
 
 
 

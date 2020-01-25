@@ -22,6 +22,8 @@ import (
 	"io/ioutil"
 	"net/mail"
 	"os"
+	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/skx/evalfilter/v2"
@@ -194,6 +196,8 @@ func main() {
 	filter := flag.String("filter", "is:unread -has:userlabels", "The search we perform to find messages to modify.")
 	script := flag.String("script", os.Getenv("HOME")+"/.labeller.script", "The script we execute against messages.")
 	updateLabels := flag.Bool("update-labels", false, "Mark all labels as 'labelShowIfUnread'.")
+	listLabels := flag.Bool("list-labels", false, "List all available labels.")
+	deleteLabels := flag.String("delete-labels", "", "Delete all labels matching the given regular expression.")
 	verbose = flag.Bool("verbose", false, "Should we be more verbose?")
 	flag.Parse()
 
@@ -229,6 +233,90 @@ func main() {
 	srv, err = gmail.NewService(context.Background(), option.WithHTTPClient(client))
 	if err != nil {
 		fmt.Printf("Unable to create Gmail client: %v", err)
+		return
+	}
+
+	//
+	// If we're listing our lables do that now.
+	//
+	if *listLabels {
+
+		//
+		// Find all the labels
+		//
+		existing, err := srv.Users.Labels.List("me").Do()
+		if err != nil {
+			fmt.Printf("Error updating labels: %s\n", err.Error())
+			return
+		}
+
+		// we're going to show these as sorted
+		var names []string
+		for _, label := range existing.Labels {
+			names = append(names, label.Name)
+		}
+
+		sort.Slice(names, func(i, j int) bool {
+			return strings.ToLower(names[i]) < strings.ToLower(names[j])
+		})
+
+		for _, name := range names {
+			fmt.Printf("%s\n", name)
+		}
+
+		return
+	}
+
+	//
+	// Deleting label, by regexp?
+	//
+	if *deleteLabels != "" {
+
+		//
+		// Compile the regular expression
+		//
+		r, err := regexp.Compile(*deleteLabels)
+		if err != nil {
+			fmt.Printf("error compiling regular expression: %s\n",
+				err.Error())
+			return
+		}
+
+		//
+		// Find all the labels
+		//
+		existing, err := srv.Users.Labels.List("me").Do()
+		if err != nil {
+			fmt.Printf("Error updating labels: %s\n", err.Error())
+			return
+		}
+
+		//
+		// Find matching labels
+		//
+		var remove []string
+
+		for _, label := range existing.Labels {
+			if r.MatchString(label.Name) {
+				remove = append(remove, label.Name)
+			}
+		}
+		for _, name := range remove {
+
+			fmt.Printf("Deleting label:%s\n", name)
+			id, err := getLabelID(srv, name)
+			if err != nil {
+				fmt.Printf("Failed to get ID for %s: %s\n",
+					name, err.Error())
+				return
+			}
+
+			err = srv.Users.Labels.Delete("me", id).Do()
+			if err != nil {
+				fmt.Printf("Error removing label: %s - %s\n", name, err.Error())
+				return
+			}
+		}
 		return
 	}
 
