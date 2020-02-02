@@ -46,12 +46,9 @@ if ( Subject ~= /attic: backup/ ) {
 //
 print( "\tThe message has ", len(To), " recipients\n");
 
-i = 0;
-while( i < len(To) )
-{
-   print( "\t\tRecipient:", i+1, " ", To[i],
-          " Local:", ToPart[i], " Domain:", ToDomain[i], "\n" );
-   i = i + 1;
+foreach index,recipient in To {
+   printf("Recipient %d - LocalPart:%s Domain:%s\n",
+          index, ToPart[index], ToDomain[index])
 }
 print( "\n");
 
@@ -69,10 +66,8 @@ if ( "skx@debian.org" in To ) {
 // Show existing labels, if any
 //
 print("\tThe message has ", len(Labels), " labels.\n");
-i = 0;
-while( i < len(Labels) ) {
-  print("\tLabel ", i+1 , " is " , Labels[i], "\n");
-  i = i + 1;
+foreach index,label in Labels {
+  printf("\tLabel %d is %s\n", index, label);
 }
 
 
