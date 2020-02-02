@@ -116,7 +116,8 @@ func prepareScript(path string) error {
 	eval.AddFunction("add",
 		func(args []object.Object) object.Object {
 			if len(args) != 1 {
-				return &object.Boolean{Value: false}
+				fmt.Printf("one argument required to add() - received %d\n", len(args))
+				return &object.Void{}
 			}
 
 			// Stringify
@@ -130,7 +131,7 @@ func prepareScript(path string) error {
 			id, err := getLabelID(srv, str)
 			if err != nil {
 				fmt.Printf("WARNING: failed to find/create label '%s' - %s", str, err.Error())
-				return &object.Boolean{Value: false}
+				return &object.Void{}
 			}
 
 			// Create the modification of the message.
@@ -140,15 +141,15 @@ func prepareScript(path string) error {
 			_, err = srv.Users.Messages.Modify("me", msgID, mod).Do()
 			if err != nil {
 				fmt.Printf("unable to add label [%s] to message %s - %v", str, msgID, err)
-				return &object.Boolean{Value: true}
 			}
 
-			return &object.Boolean{Value: true}
+			return &object.Void{}
 		})
 	eval.AddFunction("remove",
 		func(args []object.Object) object.Object {
 			if len(args) != 1 {
-				return &object.Boolean{Value: false}
+				fmt.Printf("one argument required to add() - received %d\n", len(args))
+				return &object.Void{}
 			}
 
 			// Stringify
@@ -162,7 +163,7 @@ func prepareScript(path string) error {
 			id, err := getLabelID(srv, str)
 			if err != nil {
 				fmt.Printf("WARNING: failed to find/create label '%s' - %s", str, err.Error())
-				return &object.Boolean{Value: false}
+				return &object.Void{}
 			}
 
 			// Create the modification of the message.
@@ -172,10 +173,9 @@ func prepareScript(path string) error {
 			_, err = srv.Users.Messages.Modify("me", msgID, mod).Do()
 			if err != nil {
 				fmt.Printf("unable to remove label [%s] from message %s - %v", str, msgID, err)
-				return &object.Boolean{Value: true}
 			}
 
-			return &object.Boolean{Value: true}
+			return &object.Void{}
 		})
 
 	return nil
